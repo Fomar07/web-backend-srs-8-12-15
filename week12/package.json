@@ -1,0 +1,16 @@
+{
+  "name": "fitness-srs-12",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env src/server.cjs",
+    "test": "node --env-file-if-exists=.env tests/verify.cjs"
+  },
+  "dependencies": {
+    "express": "5.1.0",
+    "mongoose": "8.19.1"
+  }
+}
