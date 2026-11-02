@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({quiet:true});
 const db=require('../db');
 const lab=require('../lab.json');
 const {ObjectId}=require('mongodb');

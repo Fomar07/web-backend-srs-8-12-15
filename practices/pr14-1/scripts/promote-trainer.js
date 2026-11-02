@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({quiet:true});
 const db=require('../db');
 const email=process.argv[2];
 if(!email)throw new Error('Укажите email: node scripts/promote-trainer.js email');
