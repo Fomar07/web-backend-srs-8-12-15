@@ -1,0 +1,35 @@
+{
+  "name": "fitness-pr15",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node scripts/seed.js",
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "check": "newman run postman_collection.json"
+  },
+  "dependencies": {
+    "express": "5.1.0",
+    "cors": "2.8.5",
+    "mongodb": "6.20.0",
+    "mongoose": "8.19.2",
+    "dotenv": "16.6.1",
+    "express-validator": "7.2.1",
+    "bcryptjs": "3.0.2",
+    "jsonwebtoken": "9.0.2",
+    "express-rate-limit": "8.1.0",
+    "helmet": "8.1.0",
+    "morgan": "1.10.1",
+    "compression": "1.8.1",
+    "vue": "3.5.22"
+  },
+  "devDependencies": {
+    "vite": "6.4.1",
+    "@vitejs/plugin-vue": "5.2.4",
+    "newman": "6.2.1"
+  }
+}

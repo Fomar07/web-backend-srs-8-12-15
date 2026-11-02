@@ -1,0 +1,40 @@
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+const lab = require('./lab.json');
+const db = require('./db');
+const app = express();
+app.disable('x-powered-by');
+app.set('query parser','simple');
+if (lab.stage >= 14.1) {
+  app.use(require('helmet')());
+  const allowed=(process.env.ALLOWED_ORIGINS||`http://localhost:5173,http://127.0.0.1:${lab.port}`).split(',');
+  app.use((req,res,next)=>{const origin=req.get('Origin');if(origin&&!allowed.includes(origin))return res.status(403).json({error:'Origin не разрешён'});next();});
+  app.use(cors({ origin: allowed }));
+  const {rateLimit}=require('express-rate-limit');
+  app.use('/api',rateLimit({windowMs:60000,limit:Number(process.env.RATE_LIMIT_MAX||100),standardHeaders:'draft-8',legacyHeaders:false,message:{error:'Слишком много запросов. Повторите позже'}}));
+} else app.use(cors());
+if (lab.stage >= 14.2) app.use(require('morgan')('combined'));
+if (lab.stage >= 15) app.use(require('compression')());
+app.use((req,res,next)=>{
+ if (['POST','PUT','PATCH'].includes(req.method)&&!req.is('application/json')) return res.status(415).json({error:'Требуется Content-Type: application/json'});
+ next();
+});
+app.use(express.json({limit:'20kb'}));
+app.get('/health',(req,res)=>res.status(db.connected()?200:503).json({status:db.connected()?'ok':'unavailable',practice:lab.number,uptime:process.uptime(),timestamp:new Date().toISOString()}));
+app.get('/api/config',(req,res)=>res.json(lab));
+if(lab.stage>=13)app.use('/api/auth',require('./routes/auth'));
+const resource=lab.stage<11?require('./nativeRoutes'):require('./routes/items');
+app.use('/api/items',resource);
+app.use('/api/workouts',resource);
+app.use(express.static(path.join(__dirname,'dist')));
+app.use((req,res)=>res.status(404).json({error:'Маршрут не найден'}));
+app.use((err,req,res,next)=>{
+ let status=err.status||500;
+ if(['ValidationError','CastError','StrictModeError'].includes(err.name))status=400;
+ if(err.code===11000)status=409;
+ const error=status>=500?'Ошибка сервера':err.code===11000?'Email уже зарегистрирован':err.message;
+ console.error(`${req.method} ${req.path}: ${status}`);
+ res.status(status).json({error});
+});
+module.exports=app;

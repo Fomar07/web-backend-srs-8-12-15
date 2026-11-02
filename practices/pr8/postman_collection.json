@@ -1,0 +1,78 @@
+{
+  "info": {
+    "name": "Практика 8 / Фитнес",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:3208"
+    },
+    {
+      "key": "newEmail",
+      "value": "client-{{$timestamp}}@example.test"
+    }
+  ],
+  "item": [
+    {
+      "name": "Данные из MongoDB",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{baseUrl}}/api/items"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('HTTP 200',()=>pm.response.to.have.status(200));"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Создание документа",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/items",
+        "body": {
+          "mode": "raw",
+          "raw": "{\"type\": \"Тест API\", \"duration\": 25, \"calories\": 120}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('HTTP 201',()=>pm.response.to.have.status(201));"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "exec": [
+          "if(pm.info.requestName==='Регистрация клиента')pm.collectionVariables.set('newEmail','lab-'+Date.now()+'@example.test');"
+        ]
+      }
+    }
+  ]
+}
