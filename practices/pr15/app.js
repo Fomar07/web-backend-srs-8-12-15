@@ -4,6 +4,8 @@ const path = require('path');
 const lab = require('./lab.json');
 const db = require('./db');
 const app = express();
+// Render передаёт запросы через собственный обратный прокси.
+if (process.env.RENDER === 'true') app.set('trust proxy', 1);
 app.disable('x-powered-by');
 app.set('query parser','simple');
 if (lab.stage >= 14.1) {
