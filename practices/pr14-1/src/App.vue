@@ -45,7 +45,7 @@ async function login(register=false){error.value='';try{
 }catch(e){error.value=e.message;}}
 function logout(){token.value='';profile.value=null;localStorage.removeItem('fitness-token-'+lab.number);notice.value='Выход выполнен';}
 async function assign(){try{const d=await request('/api/workouts/assign',{method:'POST',body:JSON.stringify({program:'Кардио и мобильность'})});notice.value=d.message;}catch(e){error.value=e.message;}}
-async function burst(){counters.ok=0;counters.limited=0;for(let i=0;i<8;i++){const r=await fetch(API+'/api/config');if(r.status===429)counters.limited++;else if(r.ok)counters.ok++;}}
+async function burst(){counters.ok=0;counters.limited=0;for(let i=0;i<105;i++){const r=await fetch(API+'/api/config');if(r.status===429)counters.limited++;else if(r.ok)counters.ok++;}}
 function find(){filters.page=1;load();}
 onMounted(async()=>{await load();if(token.value){try{profile.value=await request('/api/auth/profile');}catch{logout();}}});
 </script>
@@ -63,7 +63,7 @@ onMounted(async()=>{await load();if(token.value){try{profile.value=await request
  <table><thead><tr><th>Тренировка</th><th>Длительность</th><th>Энергия</th><th>Дата</th><th>Тренер</th><th v-if="lab.stage>=11">Действия</th></tr></thead><tbody><tr v-for="w in items" :key="w._id"><td><span class="activity-dot"></span><b>{{w.type}}</b><small v-if="w.exercises?.length">{{w.exercises.join(', ')}}</small></td><td>{{w.duration}} мин</td><td>{{w.calories}} ккал</td><td>{{new Date(w.date).toLocaleDateString('ru-RU')}}</td><td>{{w.trainerData?.name||w.trainer||'Самостоятельно'}}</td><td v-if="lab.stage>=11"><button class="text" @click="edit(w)">Изменить</button><button class="text danger" @click="remove(w)">Удалить</button></td></tr></tbody></table><p v-if="!items.length&&!busy">По этим условиям тренировок нет.</p>
  <div v-if="lab.stage>=15" class="pager"><button class="secondary" :disabled="filters.page<=1" @click="filters.page--;load()">Назад</button><span>Страница {{pagination.page}} из {{pagination.pages||1}} · Всего {{pagination.total}}</span><button class="secondary" :disabled="filters.page>=pagination.pages" @click="filters.page++;load()">Вперёд</button></div>
  </section><div class="stats"><div v-for="s in stats" :key="s._id" class="stat"><span>{{s._id}}</span><strong>{{Math.round(s.avgDuration)}} <small>мин в среднем</small></strong><p>{{s.count}} занятий · {{s.totalCalories||0}} ккал</p></div></div>
- <section v-if="lab.stage===14.1" class="panel section-title"><div><h2>Проверка ограничения запросов</h2><p>Успешно: {{counters.ok}} · Ограничено (429): {{counters.limited}}</p></div><button @click="burst">Отправить 8 запросов</button></section>
+ <section v-if="lab.stage===14.1" class="panel section-title"><div><h2>Проверка ограничения запросов</h2><p>Успешно: {{counters.ok}} · Ограничено (429): {{counters.limited}}</p></div><button @click="burst">Отправить 105 запросов</button></section>
  <footer>Фитнес-трекер · Талгатулы Диас · ИИ-402</footer>
  </main>
 </template>

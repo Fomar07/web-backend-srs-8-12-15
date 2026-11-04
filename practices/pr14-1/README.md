@@ -4,10 +4,10 @@
 
 ## Запуск
 
-Требуются Node.js 20+ и MongoDB. Команды выполняются в этой папке, рядом с package.json.
+Требуются Node.js 20.19+ и MongoDB. Команды выполняются в этой папке, рядом с package.json.
 
 ```powershell
-npm install
+npm ci
 Copy-Item .env.example .env
 # В .env задайте адрес MongoDB и случайный JWT_SECRET (для практик с JWT).
 npm run seed

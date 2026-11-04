@@ -4,10 +4,10 @@
 
 ## Запуск
 
-Требуются Node.js 20+ и MongoDB. Команды выполняются в этой папке, рядом с package.json.
+Требуются Node.js 20.19+ и MongoDB. Команды выполняются в этой папке, рядом с package.json.
 
 ```powershell
-npm install
+npm ci
 Copy-Item .env.example .env
 # В .env задайте адрес MongoDB и случайный JWT_SECRET (для практик с JWT).
 npm run seed
@@ -44,3 +44,11 @@ MongoDB shell: mongosh "mongodb://127.0.0.1:27017/lab14_variant15" scripts/mongo
 Для Vercel задать VITE_API_URL равным адресу Render без завершающего слеша.
 Для Render: npm install, npm run build, npm start; переменные MONGO_URL, JWT_SECRET, ALLOWED_ORIGINS, NODE_ENV=production.
 В ALLOWED_ORIGINS указать точный домен Vercel. Процесс один: проверка пересечений сериализует запись внутри процесса; для нескольких экземпляров нужны распределённые блокировки.
+
+## Опубликованное приложение
+
+Frontend: https://fitness-pr14-2-dias.vercel.app
+
+Backend: https://backend-pr14-2-fitness-dias.onrender.com
+
+Health: https://backend-pr14-2-fitness-dias.onrender.com/health
